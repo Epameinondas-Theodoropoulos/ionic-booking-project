@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PlaceDetailPage } from './place-detail.page';
+import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-booking.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [PlaceDetailPage]
+  declarations: [PlaceDetailPage, CreateBookingComponent],
+  //Epeidh den to vazoume OUTE me to tag tou OUTE pame e auto me to routing tote prepei na to valoume e ayton ton eidiko array
+  entryComponents: [CreateBookingComponent]
 })
 export class PlaceDetailPageModule {}

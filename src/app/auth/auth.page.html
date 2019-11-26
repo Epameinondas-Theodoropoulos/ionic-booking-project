@@ -5,7 +5,55 @@
 </ion-header>
 
 <ion-content padding>
+  <!-- 
+    Logo tou ion-item edw exoume to animation otan patei to input na phgaine pros ta panw to string kai na ginetia mple h grammi
+    An sxoliasoume to ion-item tha ginetai h leitourgia alla den tha fainetai to animation ayto
+    
+   -->
+  <ion-item>
+    <ion-label position="floating">E-Mail</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
   <ion-button color="primary" (click)="onLogin()">
     Login
   </ion-button>
+
+
+  <div >
+      <div class="container">
+          <div class="row">
+            <div class="col-xs-12">
+              <h1>Animations</h1>
+              <button class="btn btn-primary" (click)="onAnimate()">Animate!</button>
+              <button class="btn btn-primary" (click)="onShrink()">Shrink!</button>
+              <hr>
+              <!--
+                Ayto to  [@divState] tha kanei trigger to animation pou exoume orisei 
+                Tha prepei na to kanoume kai kapou bind. Edw kanoume bind thn sinthiki pio part tou animation 
+                pou prokeitai na kanoume set up , prepei na trexoume
+              -->
+              <div 
+              style="width: 100px; height: 100px"
+              [@divState]="state"
+              (@divState.start)="animationStarted($event)"
+              (@divState.done)="animationEnded($event)">
+              <!--
+                To (@divState.start) einai ena callback pou mas epitrepei na kanoume trigger pragmata otan 
+                ena animation xekinaei 
+              -->
+              </div>
+              <hr>
+                  <!-- 
+                    Vazoume to kainourgio div gia na kanoume ena allo animation kata thn diarkeia ths metavashs
+                -->
+              <div 
+              style="width: 100px; height: 100px"
+              [@wildState]="wildState"></div>
+              </div>
+        
+            </div>
+          </div>
+          <hr>        
+  </div>
+
 </ion-content>

@@ -6,13 +6,15 @@
       <!-- <ion-button (click)="onOpenMenu()">
         Open
       </ion-button> -->
-      <ion-menu-button menu="m1"></ion-menu-button>
+      <ion-menu-button menu="m1" >
+        <img src="../../../assets/img/icons8-gear-30.png">
+      </ion-menu-button>
     </ion-buttons>
     <ion-title>Discover Places</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
 
   <ion-grid>
     <ion-row>
@@ -25,7 +27,7 @@
           </ion-card-header>
           <ion-img [src]="loadedPlaces[0].imageUrl"></ion-img>
           <ion-card-content>
-            <p> {{loadedPlaces[0].description}} </p>
+            <p> <ion-text color="danger"> {{loadedPlaces[0].description}} </ion-text>  </p>
           </ion-card-content>
           <div>
             <ion-button 

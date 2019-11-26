@@ -7,6 +7,64 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 
+  <ion-grid no-padding>
+    <!--
+      Xrisimopoiei apo pisv to CSS Flexbox
+      align-items-strech: auto einai to default kai gineta strech gia to vertical place olo .
+      align-items-start: Pairnei oso ypsos xreiazetai kai xekinaei apo to top
+      align-items-end: to idio kai to vazei sto bottom
+      align-items-center: to idio kai to vazei sto kentro
+
+      Twra gia orizontia exoume to justify-content
+      justify-content-start
+      justify-content-end
+      justify-content-center
+    -->
+    <ion-row align-items-center justify-content-center> 
+      <!-- apo ta 12 ta 4. Epishs me to offset leme na ginei push sta dexia kata 2 columns   -->
+      <!-- 
+        <ion-col size="3" >Row 1 Col 1</ion-col> 
+        <ion-col size="3" offset="2">      
+          <ion-card>
+            <ion-card-content>
+              <h1>The column</h1>
+              <p>row 1 col 2</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col> 
+      -->
+
+      <ion-col size-sm="4" size-md="2" offset-sm="2" offset-md="4" >Row 1 Col 1</ion-col> 
+      <ion-col size-sm="4" size-md="3">
+        <ion-card>
+          <ion-card-content>
+            <h1>The Column</h1>
+            <p>row 1 col 2</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- 
+      <ion-col>Row 1 Col 3</ion-col>
+      <ion-col>Row 1 Col 4</ion-col>
+      <ion-col>Row 1 Col 5</ion-col>
+      <ion-col>Row 1 Col 6</ion-col>
+      <ion-col>Row 1 Col 7</ion-col>
+      <ion-col>Row 1 Col 8</ion-col>
+      <ion-col>Row 1 Col 9</ion-col>
+      <ion-col>Row 1 Col 10</ion-col>
+      <ion-col>Row 1 Col 11</ion-col>
+      <ion-col>Row 1 Col 12</ion-col>  
+      -->
+      <!-- An valoume 13o column , akomh tha mpei alla twra ftanoume se ena shmeio  pou o grid den einai optimized and also
+      your response of breakpoints will not be usable in a perfect way-->
+    </ion-row>
+
+    <ion-row>
+      
+    </ion-row>
+
+  </ion-grid>
 </ion-content>

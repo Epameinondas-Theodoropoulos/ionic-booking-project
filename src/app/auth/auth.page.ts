@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { trigger, state, style, transition, animate, keyframes, group } from '@angular/animations';
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
@@ -79,16 +80,32 @@ import { trigger, state, style, transition, animate, keyframes, group } from '@a
   ]
 })
 export class AuthPage implements OnInit {
+  isLoading = false;
 
-  constructor(private authService: AuthService,private router: Router) { }
+  constructor(private authService: AuthService,private router: Router, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
   }
 
   onLogin()
   {
+    this.isLoading = true;
     this.authService.login();
-    this.router.navigateByUrl('/places/tabs/discover');
+
+    //diourgei Ena controller programmatistika
+    //H diafora einai oti dhiourgei ena overlay pou mas empodizei na exoume opoiadhpote diadrash me thn selida .
+    // to theloume se selides typoy login poy o xrhsths PREPEI na perimenei kai den mporei na kanei kati allo
+    this.loadingCtrl
+    .create({keyboardClose: true, message: 'Logging in...'})
+    .then(loadingel => {
+      loadingel.present();
+      setTimeout(() => {
+        this.isLoading = false;
+        loadingel.dismiss();
+        this.router.navigateByUrl('/places/tabs/discover');
+        }, 2000);
+    }) 
+ 
   }
 
 

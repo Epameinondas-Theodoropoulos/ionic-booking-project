@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
 import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-booking.component';
@@ -17,7 +17,8 @@ export class PlaceDetailPage implements OnInit {
     private navCtrl: NavController, 
     private route: ActivatedRoute, 
     private placesService: PlacesService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private actionSheetCtrl: ActionSheetController // A set of options that slides up from the bottom of the page
     ) { }
 
   place: Place;
@@ -46,9 +47,38 @@ export class PlaceDetailPage implements OnInit {
     */
 
     // Pio prin mexri na ftasoume na ftiaxoume to modal eixame to apo panw poy den ekane tipota. Ftasame sth enotita tou modal twra
+
+    this.actionSheetCtrl.create({
+      header: 'Choose an Action',
+      buttons:[
+        {
+          text: 'Select Date',
+          handler: () => {this.openBookingModal('select')}
+        },
+        {
+          text: 'Random Date',
+          handler: () => {this.openBookingModal('random')}
+        },
+        {
+          text: 'Cancel',
+          role: 'destructive'
+        }
+      ]
+    })
+    .then(actionSheetEl => {
+      actionSheetEl.present();
+    })
+
+    
+  }
+
+  //dexetai mono autes tis 2 times
+  openBookingModal(mode: 'select' | 'random')
+  {
+    console.log(mode);
     this.modalCtrl
     .create({
-      component: CreateBookingComponent, 
+      component: CreateBookingComponent, // to vazoume kai sto declerations kai sto entryComponents gia na xrisimopoihtei edw. Des to module tou
       componentProps: {selectedPlace: this.place}
     })
     .then(modalEl => {
@@ -62,7 +92,6 @@ export class PlaceDetailPage implements OnInit {
         console.log("BOOKED!!");
       }
     });
-
   }
 
 }

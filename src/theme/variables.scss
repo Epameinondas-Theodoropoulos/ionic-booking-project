@@ -4,7 +4,7 @@
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
+  --ion-color-primary: #da001d;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -74,4 +74,19 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  --ion-item-border-color: rgb(124, 53, 53);
+  --ion-toolbar-background: var(--ion-color-primary, black); //an den to vrei tha valei to mauro
+  
+}
+
+// vlepome to mode kai to allazoume mono gia to ios edw. Based on the platoform
+.ios {
+  --ion-color-primary: #00da41;
+
+}
+
+ion-button {
+  --background: blue;
+  --box-shadow: 2px 2px 20px rgba(0,0,0,0.6);
 }

@@ -1,28 +1,78 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Authenticate</ion-title>
+    <ion-title> {{ isLogin ? 'Login' : 'Signup' }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <!-- 
-    Logo tou ion-item edw exoume to animation otan patei to input na phgaine pros ta panw to string kai na ginetia mple h grammi
-    An sxoliasoume to ion-item tha ginetai h leitourgia alla den tha fainetai to animation ayto
-    
-   -->
-  <ion-item>
-    <ion-label position="floating">E-Mail</ion-label>
-    <ion-input></ion-input>
-  </ion-item>
-  <!-- <div text-center> vazoume sthn thesi toy ton Loadingcontroller
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-list>
+          <!-- 
+            Logo tou ion-item edw exoume to animation otan patei to input na phgaine pros ta panw to string kai na ginetia mple h grammi
+            An sxoliasoume to ion-item tha ginetai h leitourgia alla den tha fainetai to animation ayto
+          -->
+          <ion-item>
+            <ion-label position="floating">E-Mail</ion-label>
+            <ion-input                 
+            type="email"
+            ngModel
+            name="email"
+            required
+            email
+            #emailCtrl="ngModel">
+          </ion-input>
+          </ion-item>
+          <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
+              <ion-label>Should be a valid email address.</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input 
+            type="password" 
+            ngModel 
+            name="password" 
+            required 
+            minlength="6" 
+            #passwordCtrl="ngModel"
+            ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none">
+            <ion-label>Should at least be 6 characters long.</ion-label>
+        </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <!-- <div text-center> vazoume sthn thesi toy ton Loadingcontroller
       <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner>
   </div> -->
-  <ion-button  (click)="onLogin()" *ngIf="!isLoading">
-    Login
-  </ion-button>
+        <ion-button 
+        color="primary" 
+        fill="clear" 
+        expand="full" 
+        type="button"
+        (click)="onSwitchAuthMode()">
+          Switch to {{ isLogin ? 'Signup' : 'Login'}}
+        </ion-button>
+        <ion-button
+          type="submit"
+          (click)="onLogin()"
+          expand="block"
+          [disabled]="!f.valid"
+          >
+          Login
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+  <!-- Douleu kanonika olo to animation -->
 
-
-  <div >
+  <!-- <div >
       <div class="container">
           <div class="row">
             <div class="col-xs-12">
@@ -30,25 +80,16 @@
               <button class="btn btn-primary" (click)="onAnimate()">Animate!</button>
               <button class="btn btn-primary" (click)="onShrink()">Shrink!</button>
               <hr>
-              <!--
-                Ayto to  [@divState] tha kanei trigger to animation pou exoume orisei 
-                Tha prepei na to kanoume kai kapou bind. Edw kanoume bind thn sinthiki pio part tou animation 
-                pou prokeitai na kanoume set up , prepei na trexoume
-              -->
+
               <div 
               style="width: 100px; height: 100px"
               [@divState]="state"
               (@divState.start)="animationStarted($event)"
               (@divState.done)="animationEnded($event)">
-              <!--
-                To (@divState.start) einai ena callback pou mas epitrepei na kanoume trigger pragmata otan 
-                ena animation xekinaei 
-              -->
+
               </div>
               <hr>
-                  <!-- 
-                    Vazoume to kainourgio div gia na kanoume ena allo animation kata thn diarkeia ths metavashs
-                -->
+
               <div 
               style="width: 100px; height: 100px"
               [@wildState]="wildState"></div>
@@ -57,6 +98,5 @@
             </div>
           </div>
           <hr>        
-  </div>
-
+  </div> -->
 </ion-content>

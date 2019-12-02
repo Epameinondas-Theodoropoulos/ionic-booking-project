@@ -79,7 +79,7 @@ export class PlaceDetailPage implements OnInit {
     this.modalCtrl
     .create({
       component: CreateBookingComponent, // to vazoume kai sto declerations kai sto entryComponents gia na xrisimopoihtei edw. Des to module tou
-      componentProps: {selectedPlace: this.place}
+      componentProps: {selectedPlace: this.place, selectedMode: mode}
     })
     .then(modalEl => {
       modalEl.present();

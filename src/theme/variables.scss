@@ -75,7 +75,7 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  --ion-item-border-color: rgb(124, 53, 53);
+  --ion-item-border-color: rgb(199, 15, 168);
   --ion-toolbar-background: var(--ion-color-primary, black); //an den to vrei tha valei to mauro
   
 }
@@ -87,6 +87,6 @@
 }
 
 ion-button {
-  --background: blue;
+  --background: rgb(255, 0, 140);
   --box-shadow: 2px 2px 20px rgba(0,0,0,0.6);
 }

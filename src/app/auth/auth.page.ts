@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { trigger, state, style, transition, animate, keyframes, group } from '@angular/animations';
 import { LoadingController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -81,16 +82,39 @@ import { LoadingController } from '@ionic/angular';
 })
 export class AuthPage implements OnInit {
   isLoading = false;
-
+  isLogin= true;
   constructor(private authService: AuthService,private router: Router, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
   }
 
+  onSubmit(form: NgForm)
+  {
+    // debugger;
+    console.log(form);
+    if(!form.valid)
+    {
+      return ;
+    }
+    const email = form.value.email;
+    const password = form.value.password;
+    console.log(email, password)
+    if( this.isLogin)
+    {
+      //send a request a login servers
+    }
+    else 
+    {
+      //send a request to signup servers
+    }
+  }
+
   onLogin()
   {
+    // debugger;
     this.isLoading = true;
     this.authService.login();
+    
 
     //diourgei Ena controller programmatistika
     //H diafora einai oti dhiourgei ena overlay pou mas empodizei na exoume opoiadhpote diadrash me thn selida .
@@ -106,6 +130,11 @@ export class AuthPage implements OnInit {
         }, 2000);
     }) 
  
+  }
+
+  onSwitchAuthMode()
+  {
+    this.isLogin = !this.isLogin;
   }
 
 

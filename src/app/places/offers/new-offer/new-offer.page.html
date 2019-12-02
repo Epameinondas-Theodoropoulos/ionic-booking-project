@@ -4,13 +4,68 @@
       <ion-back-button defaultHref="/places/tabs/offers"></ion-back-button>
     </ion-buttons>
     <ion-title>New Offer</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onCreateOffer()" [disabled]="!form.valid">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <form [formGroup]="form">
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input type="text" autocomplete autocorrect formControlName="title"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Short Description</ion-label>
+          <ion-textarea rows="3" formControlName="description"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!form.get('description').valid && form.get('description').touched"> 
+      <ion-col size-sm="6" offset-sm="3">
+        <p>Description must not be between 1 and 200 chracters</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Price</ion-label>
+          <ion-input type="number" formControlName="price"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-sm="3" offset-sm="3">
+        <ion-item>
+          <ion-label position="floating">Availiable from</ion-label>
+          <ion-datetime min="2019-01-01" max="2021-05-27" formControlName="dateFrom"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size-sm="3" >
+        <ion-item>
+          <ion-label position="floating">Availiable to</ion-label>
+          <ion-datetime min="2019-01-02" max="2021-05-27" formControlName="dateTo"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>
+</ion-content>
+
+<!-- <ion-content>
 
   <ion-grid no-padding>
-    <!--
+    <!- -
       Xrisimopoiei apo pisv to CSS Flexbox
       align-items-strech: auto einai to default kai gineta strech gia to vertical place olo .
       align-items-start: Pairnei oso ypsos xreiazetai kai xekinaei apo to top
@@ -21,10 +76,10 @@
       justify-content-start
       justify-content-end
       justify-content-center
-    -->
+    - ->
     <ion-row align-items-center justify-content-center> 
-      <!-- apo ta 12 ta 4. Epishs me to offset leme na ginei push sta dexia kata 2 columns   -->
-      <!-- 
+      <!- - apo ta 12 ta 4. Epishs me to offset leme na ginei push sta dexia kata 2 columns   - ->
+      <!- - 
         <ion-col size="3" >Row 1 Col 1</ion-col> 
         <ion-col size="3" offset="2">      
           <ion-card>
@@ -34,7 +89,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col> 
-      -->
+      - ->
 
       <ion-col size-sm="4" size-md="2" offset-sm="2" offset-md="4" >Row 1 Col 1</ion-col> 
       <ion-col size-sm="4" size-md="3">
@@ -46,7 +101,7 @@
         </ion-card>
       </ion-col>
 
-      <!-- 
+      <!- - 
       <ion-col>Row 1 Col 3</ion-col>
       <ion-col>Row 1 Col 4</ion-col>
       <ion-col>Row 1 Col 5</ion-col>
@@ -57,9 +112,9 @@
       <ion-col>Row 1 Col 10</ion-col>
       <ion-col>Row 1 Col 11</ion-col>
       <ion-col>Row 1 Col 12</ion-col>  
-      -->
-      <!-- An valoume 13o column , akomh tha mpei alla twra ftanoume se ena shmeio  pou o grid den einai optimized and also
-      your response of breakpoints will not be usable in a perfect way-->
+      - ->
+      <!- - An valoume 13o column , akomh tha mpei alla twra ftanoume se ena shmeio  pou o grid den einai optimized and also
+      your response of breakpoints will not be usable in a perfect way- ->
     </ion-row>
 
     <ion-row>
@@ -67,4 +122,4 @@
     </ion-row>
 
   </ion-grid>
-</ion-content>
+</ion-content> -->

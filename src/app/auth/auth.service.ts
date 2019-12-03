@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   private _userIsAuthneticated: boolean = true ; // kanonika false. to kanoume tru gia na mhn patame synexeia login
-  private _userId = 'abc';
+  private _userId: string = 'abc';
   constructor() { }
 
   get userIsAuthneticated()
@@ -17,7 +17,7 @@ export class AuthService {
 
   get userId ()
   {
-    return this.userId;
+    return this._userId;
   }
 
   login()

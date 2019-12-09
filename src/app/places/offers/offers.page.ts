@@ -16,6 +16,8 @@ export class OffersPage implements OnInit, OnDestroy {
 
   loadedOffers: Offer[];
   private offersSub: Subscription;
+  isLoading = false;
+
   ngOnInit() {
     // this.loadedOffers = this.placesService.offers;
     this.offersSub = this.placesService.offers.subscribe(
@@ -23,6 +25,14 @@ export class OffersPage implements OnInit, OnDestroy {
         this.loadedOffers = offers;
       }
     );
+  }
+
+  ionViewWillEnter()
+  {
+    this.isLoading = true;
+    this.placesService.fetchOffers().subscribe(() => {
+      this.isLoading = false;
+    });
   }
 
   onEdit(offerId: string, slidingItem: IonItemSliding)

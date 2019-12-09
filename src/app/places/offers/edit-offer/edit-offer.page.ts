@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NavController, LoadingController } from "@ionic/angular";
+import { NavController, LoadingController, AlertController } from "@ionic/angular";
 import { Offer } from "../offer.model";
 import { PlacesService } from "../../places.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -19,17 +19,24 @@ export class EditOfferPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private placesService: PlacesService,
     private router: Router,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {}
 
   offer: Offer;
   offerSub: Subscription;
+  isLoading = false;
+  offerId: string;
+
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has("placeId")) {
         this.navCtrl.navigateBack("/places/tabs/offers");
         return;
       }
+
+      this.offerId = paramMap.get("placeId");
+      this.isLoading= true;
       // this.offer = this.placesService.getOffer(paramMap.get('placeId'));
       this.offerSub = this.placesService
         .getOffer(paramMap.get("placeId"))
@@ -45,6 +52,18 @@ export class EditOfferPage implements OnInit, OnDestroy {
               updateOn: "blur",
               validators: [Validators.required, Validators.maxLength(200)]
             })
+          });
+          this.isLoading = false;
+        }, error => {
+          this.alertCtrl.create ({
+            header: 'An error occured!', 
+            message:'Offer could not be fetched. Please try again later.',
+            buttons: [{text: 'Okay', handler: () => {
+              this.router.navigate(['places/tabs/offers']);
+            }}]
+          })
+          .then(alertEl => {
+            alertEl.present();
           });
         });
     });
@@ -68,7 +87,6 @@ export class EditOfferPage implements OnInit, OnDestroy {
         this.router.navigate(['/places/tabs/offers']);
       });
     })
-
     console.log(this.form);
   }
 
@@ -90,7 +108,6 @@ export class EditOfferPage implements OnInit, OnDestroy {
         this.router.navigate(['/places']);
       });
     })
-
     console.log(this.form);
   }
 

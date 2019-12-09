@@ -22,6 +22,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
 private filter = 'all';
   listedPlacesSub: Subscription;
   relevantPlaces: Place[];
+  isLoading = false;
 
   ngOnInit() {
     // this.loadedPlaces = this.placesService.places;
@@ -30,6 +31,14 @@ private filter = 'all';
       this.onFilterUpdate(this.filter);
     //  this.relevantPlaces = places;
     //  this.listedLoadedPlaces = this.relevantPlaces.slice(1);
+    });
+  }
+
+  ionViewWillEnter()
+  {
+    this.isLoading = true;
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
     });
   }
 
@@ -55,6 +64,7 @@ private filter = 'all';
     if(filter === 'all')
     {
       this.relevantPlaces = this.loadedPlaces;
+      console.log("relevantPlaces: ", this.relevantPlaces);
     }
     else{
       this.relevantPlaces = this.loadedPlaces.filter(place => 

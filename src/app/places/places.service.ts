@@ -5,6 +5,7 @@ import { AuthService } from "../auth/auth.service";
 import { BehaviorSubject, of } from "rxjs";
 import { take, map, tap, delay, switchMap } from "rxjs/operators";
 import { HttpClient } from '@angular/common/http';
+import { OfferLocation, PlaceLocation } from './location.model';
 
 
 interface OfferData {
@@ -15,6 +16,7 @@ interface OfferData {
   price: number;
   title: string;
   userId: string;
+  location: OfferLocation;
 }
 
 interface PlaceData {
@@ -25,74 +27,76 @@ interface PlaceData {
   price: number;
   title: string;
   userId: string;
+  location: PlaceLocation;
 }
 @Injectable({
   providedIn: "root"
 })
 export class PlacesService {
-  private _places = new BehaviorSubject<Place[]>([
-    new Place(
-      "p1",
-      "Ilion",
-      "Dytika proasteia",
-      "https://www.gtp.gr/showphoto.asp?FN=/MGfiles/location/image13398[1770].jpg&w=650&H=370",
-      1000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "abc"
-    ),
-    new Place(
-      "p2",
-      "Petroupoli",
-      "Dytika kai ayta",
-      "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
-      2000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "abc"
-    ),
-    new Place(
-      "p3",
-      "Aigalew",
-      "Rakomeladika",
-      "http://www.athens-car-rental.com/wp-content/uploads/2016/09/EGALEO-CAR-RENTAL.png",
-      3000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "abc"
-    ),
-    new Place(
-      "p4",
-      "Xaidari",
-      "Dytika kai ayta",
-      "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
-      2000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "xyz"
-    ),
-    new Place(
-      "p5",
-      "Agioi Anaruroi",
-      "Dytika kai ayta",
-      "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
-      2000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "abc"
-    ),
-    new Place(
-      "p6",
-      "Kamatero",
-      "Dytika kai ayta",
-      "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
-      2000,
-      new Date("2019-01-01"),
-      new Date("2019-12-31"),
-      "abc"
-    )
-  ]);
+  // private _places = new BehaviorSubject<Place[]>([
+  //   new Place(
+  //     "p1",
+  //     "Ilion",
+  //     "Dytika proasteia",
+  //     "https://www.gtp.gr/showphoto.asp?FN=/MGfiles/location/image13398[1770].jpg&w=650&H=370",
+  //     1000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "abc"
+  //   ),
+  //   new Place(
+  //     "p2",
+  //     "Petroupoli",
+  //     "Dytika kai ayta",
+  //     "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
+  //     2000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "abc"
+  //   ),
+  //   new Place(
+  //     "p3",
+  //     "Aigalew",
+  //     "Rakomeladika",
+  //     "http://www.athens-car-rental.com/wp-content/uploads/2016/09/EGALEO-CAR-RENTAL.png",
+  //     3000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "abc"
+  //   ),
+  //   new Place(
+  //     "p4",
+  //     "Xaidari",
+  //     "Dytika kai ayta",
+  //     "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
+  //     2000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "xyz"
+  //   ),
+  //   new Place(
+  //     "p5",
+  //     "Agioi Anaruroi",
+  //     "Dytika kai ayta",
+  //     "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
+  //     2000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "abc"
+  //   ),
+  //   new Place(
+  //     "p6",
+  //     "Kamatero",
+  //     "Dytika kai ayta",
+  //     "https://i.ytimg.com/vi/VSlw_tGF1GE/maxresdefault.jpg",
+  //     2000,
+  //     new Date("2019-01-01"),
+  //     new Date("2019-12-31"),
+  //     "abc"
+  //   )
+  // ]);
 
+  private _places = new BehaviorSubject<Place[]>([]);
   private _offers = new BehaviorSubject<Offer[]>([]);
 
   constructor(private authService: AuthService, private http: HttpClient) {}
@@ -116,7 +120,8 @@ export class PlacesService {
                 resData[key].imageUrl, 
                 new Date(resData[key].availiableFrom), 
                 new Date(resData[key].availiableTo), 
-                resData[key].userId
+                resData[key].userId,
+                resData[key].location
               )
             );
           }
@@ -153,7 +158,8 @@ export class PlacesService {
                 resData[key].price, 
                 new Date(resData[key].availiableFrom), 
                 new Date(resData[key].availiableTo), 
-                resData[key].userId
+                resData[key].userId,
+                resData[key].location
               )
             );
           }
@@ -182,15 +188,17 @@ export class PlacesService {
     return this.http.get<PlaceData>(`https://ionic-angular-booking-ce888.firebaseio.com/places/${id}.json`)
     .pipe(
       map(placeData => {
-        return new Offer(
+        return new Place(
           id, 
           placeData.title, 
           placeData.description, 
-          placeData.price,
           placeData.imageUrl,  
+          placeData.price,
           new Date(placeData.availiableFrom), 
           new Date(placeData.availiableTo), 
-          placeData.userId)
+          placeData.userId,
+          placeData.location
+          )
       }),
       tap(place => {
         console.log(place);
@@ -220,7 +228,9 @@ export class PlacesService {
           offerData.imageUrl,  
           new Date(offerData.availiableFrom), 
           new Date(offerData.availiableTo), 
-          offerData.userId)
+          offerData.userId,
+          offerData.location
+          )
       }),
       tap(offer => {
         console.log(offer);
@@ -233,7 +243,8 @@ export class PlacesService {
     descpritpion: string,
     price: number,
     dateFrom: Date,
-    dateTo: Date
+    dateTo: Date,
+    location: OfferLocation
   ) {
     let generateId: string;
     const newOffer = new Offer(
@@ -244,7 +255,8 @@ export class PlacesService {
       "https://news.gtp.gr/wp-content/uploads/2019/01/Tritsis-Park.jpg",
       dateFrom,
       dateTo,
-      this.authService.userId
+      this.authService.userId,
+      location
     );
 
     return this.http.post<{name: string}>('https://ionic-angular-booking-ce888.firebaseio.com/offers.json', {
@@ -319,7 +331,8 @@ export class PlacesService {
     descpritpion: string,
     price: number,
     dateFrom: Date,
-    dateTo: Date
+    dateTo: Date,
+    location
   ) {
     let generateId: string;
     const newPlace = new Place(
@@ -330,7 +343,8 @@ export class PlacesService {
       price,
       dateFrom,
       dateTo,
-      this.authService.userId
+      this.authService.userId,
+      location
     );
 
     return this.http.post<{name: string}>('https://ionic-angular-booking-ce888.firebaseio.com/places.json', {
@@ -382,7 +396,8 @@ export class PlacesService {
           oldOffer.imageUrl,
           oldOffer.availiableFrom,
           oldOffer.availiableTo,
-          oldOffer.userId
+          oldOffer.userId,
+          oldOffer.location
         );
         return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/offers/${placeId}.json`, 
           {...updatedOffers[updatedOfferIndex], id:null}
@@ -477,7 +492,8 @@ export class PlacesService {
           oldPlace.price,
           oldPlace.availiableFrom,
           oldPlace.availiableTo,
-          oldPlace.userId
+          oldPlace.userId,
+          oldPlace.location
         );
         return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/places/${placeId}.json`, 
           {...updatedPlaces[updatedPlaceIndex], id:null}

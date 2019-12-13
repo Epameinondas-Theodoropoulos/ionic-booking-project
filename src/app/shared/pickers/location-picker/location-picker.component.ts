@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { ModalController, ActionSheetController, AlertController } from '@ionic/angular';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,7 @@ export class LocationPickerComponent implements OnInit {
   selectedLocationImage: string;
   isLoading = false;
   @Output() locationPick = new EventEmitter<OfferLocation>();
+  @Input() showPreview = false;
 
   constructor(
     private modalCtrl: ModalController, 
@@ -69,7 +70,6 @@ export class LocationPickerComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    debugger;
     Plugins.Geolocation.getCurrentPosition()
     .then(geoPosition => {
       const coordinates: Coordinates = {

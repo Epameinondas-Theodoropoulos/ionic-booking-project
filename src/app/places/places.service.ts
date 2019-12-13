@@ -238,13 +238,25 @@ export class PlacesService {
     );
   }
 
+  uploadImage(image: File)
+  {
+    // Einai ena default javascript construct poy einai gia na kaneis group mixed types , opws File kai text
+    const uploadData = new FormData();
+    uploadData.append('image', image);
+    return this.http.post<{imageUrl: string, imagePath: string}>(
+      'https://us-central1-ionic-angular-booking-ce888.cloudfunctions.net/storeImage', 
+      uploadData
+      );
+  }
+
   addOffer(
     title: string,
     descpritpion: string,
     price: number,
     dateFrom: Date,
     dateTo: Date,
-    location: OfferLocation
+    location: OfferLocation,
+    imageUrl: string
   ) {
     let generateId: string;
     const newOffer = new Offer(
@@ -252,7 +264,7 @@ export class PlacesService {
       title,
       descpritpion,
       price,
-      "https://news.gtp.gr/wp-content/uploads/2019/01/Tritsis-Park.jpg",
+      imageUrl,
       dateFrom,
       dateTo,
       this.authService.userId,

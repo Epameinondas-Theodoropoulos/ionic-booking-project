@@ -96,6 +96,29 @@ export class PlacesService {
   //   )
   // ]);
 
+  /**
+      A BehaviorSubject holds one value. When it is subscribed it emits the value immediately. A Subject doesn't hold a value.
+
+      Subject example (with RxJS 5 API):
+
+      const subject = new Rx.Subject();
+      subject.next(1);
+      subject.subscribe(x => console.log(x));
+      Console output will be empty
+
+      BehaviorSubject example:
+
+      const subject = new Rx.BehaviorSubject();
+      subject.next(1);
+      subject.subscribe(x => console.log(x));
+      Console output: 1
+
+      In addition:
+
+      BehaviorSubject can be created with initial value: new Rx.BehaviorSubject(1)
+      Consider ReplaySubject if you want the subject to hold more than one value
+   */
+  
   private _places = new BehaviorSubject<Place[]>([]);
   private _offers = new BehaviorSubject<Offer[]>([]);
 
@@ -103,8 +126,11 @@ export class PlacesService {
 
   fetchOffers()
   {
-    return this.http.get<{[key: string]: OfferData }>('https://ionic-angular-booking-ce888.firebaseio.com/offers.json')
-    .pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<{[key: string]: OfferData }>(`https://ionic-angular-booking-ce888.firebaseio.com/offers.json?auth=${token}`)
+      }),
       map(resData => {
         const offers = [];
         for(const key in resData)
@@ -141,8 +167,13 @@ export class PlacesService {
 
   fetchPlaces()
   {
-    return this.http.get<{[key: string]: PlaceData }>('https://ionic-angular-booking-ce888.firebaseio.com/places.json')
-    .pipe(
+    return this.authService.token.pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.get<{[key: string]: PlaceData }>(`https://ionic-angular-booking-ce888.firebaseio.com/places.json?auth=${token}`)
+      }),
+    // return this.http.get<{[key: string]: PlaceData }>('https://ionic-angular-booking-ce888.firebaseio.com/places.json')
+    //.pipe(
       map(resData => {
         const places = [];
         for(const key in resData)
@@ -185,8 +216,12 @@ export class PlacesService {
   }
 
   getPlace(id: string) {
-    return this.http.get<PlaceData>(`https://ionic-angular-booking-ce888.firebaseio.com/places/${id}.json`)
+    return this.authService.token
     .pipe(
+      take(1),
+      switchMap( token => {
+        return this.http.get<PlaceData>(`https://ionic-angular-booking-ce888.firebaseio.com/places/${id}.json?auth=${token}`)
+      }),
       map(placeData => {
         return new Place(
           id, 
@@ -216,9 +251,12 @@ export class PlacesService {
     //     return { ...offers.find(place => place.id === id) };
     //   })
     // );
-
-    return this.http.get<OfferData>(`https://ionic-angular-booking-ce888.firebaseio.com/offers/${id}.json`)
+    return this.authService.token
     .pipe(
+      take(1),
+      switchMap( token => {
+        return this.http.get<OfferData>(`https://ionic-angular-booking-ce888.firebaseio.com/offers/${id}.json?auth=${token}`)
+      }),
       map(offerData => {
         return new Offer(
           id, 
@@ -243,10 +281,18 @@ export class PlacesService {
     // Einai ena default javascript construct poy einai gia na kaneis group mixed types , opws File kai text
     const uploadData = new FormData();
     uploadData.append('image', image);
-    return this.http.post<{imageUrl: string, imagePath: string}>(
-      'https://us-central1-ionic-angular-booking-ce888.cloudfunctions.net/storeImage', 
-      uploadData
-      );
+    return this.authService.token
+    .pipe(
+      take(1),
+      switchMap(token => {
+        return this.http.post<{imageUrl: string, imagePath: string}>(
+          'https://us-central1-ionic-angular-booking-ce888.cloudfunctions.net/storeImage', 
+          uploadData,
+          {headers: {Authorization: 'Bearer ' + token}}
+          );
+      })
+    )
+
   }
 
   addOffer(
@@ -259,22 +305,37 @@ export class PlacesService {
     imageUrl: string
   ) {
     let generateId: string;
-    const newOffer = new Offer(
-      Math.random().toString(),
-      title,
-      descpritpion,
-      price,
-      imageUrl,
-      dateFrom,
-      dateTo,
-      this.authService.userId,
-      location
-    );
-
-    return this.http.post<{name: string}>('https://ionic-angular-booking-ce888.firebaseio.com/offers.json', {
-      ...newOffer, id: null
-    })
+    let newOffer: Offer;
+    let fetchedUserId: string;
+    return this.authService.userId
     .pipe(
+      take(1),
+      switchMap(userId => {
+        fetchedUserId = userId;
+        return this.authService.token;
+      }),
+      take(1),
+      switchMap(token => {
+        if(!fetchedUserId)
+        {
+          throw new Error('No user found!');
+        }
+        newOffer = new Offer(
+          Math.random().toString(),
+          title,
+          descpritpion,
+          price,
+          imageUrl,
+          dateFrom,
+          dateTo,
+          fetchedUserId,
+          location
+        );
+    
+        return this.http.post<{name: string}>(`https://ionic-angular-booking-ce888.firebaseio.com/offers.json?auth=${token}`, {
+          ...newOffer, id: null
+        })
+      }),
       /**
        * to switchMap pairnei ena existing observable chain, kai soy gyrnaei ena neo observable pou meta
        * tha kanei replace to palio observable sta epomena vimata ayths ths alysidas
@@ -292,6 +353,42 @@ export class PlacesService {
         this._offers.next(offers.concat(newOffer));
       })
     );
+
+    // Allaxame ton tropo twra poy kaleitai to userId to kaname subject opote eprepe na allaxei kai o tropos pou kaleitai h synarthsh
+
+    // const newOffer = new Offer(
+    //   Math.random().toString(),
+    //   title,
+    //   descpritpion,
+    //   price,
+    //   imageUrl,
+    //   dateFrom,
+    //   dateTo,
+    //   this.authService.userId,
+    //   location
+    // );
+
+    // return this.http.post<{name: string}>('https://ionic-angular-booking-ce888.firebaseio.com/offers.json', {
+    //   ...newOffer, id: null
+    // })
+    // .pipe(
+    //   /**
+    //    * to switchMap pairnei ena existing observable chain, kai soy gyrnaei ena neo observable pou meta
+    //    * tha kanei replace to palio observable sta epomena vimata ayths ths alysidas
+    //    */
+    //   switchMap(resData => {
+    //     generateId = resData.name;
+    //     return this.offers;
+    //   }),
+    //   take(1),
+    //   /**
+    //    * logo tou tap den asxoloumaste me to response to http twra alla me to this.places
+    //    */
+    //   tap(offers => {
+    //     newOffer.id = generateId;
+    //     this._offers.next(offers.concat(newOffer));
+    //   })
+    // );
 
     /**
      * Tou leei na koitaxei sto offer subject poy exoume apo panw kai se parakalw kane subscribe se ayto
@@ -347,22 +444,37 @@ export class PlacesService {
     location
   ) {
     let generateId: string;
-    const newPlace = new Place(
-      Math.random().toString(),
-      title,
-      descpritpion,
-      "https://news.gtp.gr/wp-content/uploads/2019/01/Tritsis-Park.jpg",
-      price,
-      dateFrom,
-      dateTo,
-      this.authService.userId,
-      location
-    );
-
-    return this.http.post<{name: string}>('https://ionic-angular-booking-ce888.firebaseio.com/places.json', {
-      ...newPlace, id: null
-    })
+    let newPlace: Place;
+    let fetchedUserId: string
+    return this.authService.userId
     .pipe(
+      take(1),
+      switchMap(userId => {
+        fetchedUserId = userId;
+        return this.authService.token;
+      }),
+      take(1),
+      switchMap(token => {
+        if(!fetchedUserId)
+        {
+          throw new Error('No user found!');
+        }
+        newPlace = new Place(
+          Math.random().toString(),
+          title,
+          descpritpion,
+          "https://news.gtp.gr/wp-content/uploads/2019/01/Tritsis-Park.jpg",
+          price,
+          dateFrom,
+          dateTo,
+          fetchedUserId,
+          location
+        );
+    
+        return this.http.post<{name: string}>(`https://ionic-angular-booking-ce888.firebaseio.com/places.json?auth=${token}`, {
+          ...newPlace, id: null
+        })
+      }),
       /**
        * to switchMap pairnei ena existing observable chain, kai soy gyrnaei ena neo observable pou meta
        * tha kanei replace to palio observable sta epomena vimata ayths ths alysidas
@@ -384,7 +496,14 @@ export class PlacesService {
 
   updateOffer(placeId: string, title: string, description: string) {
     let updatedOffers: Offer[];
-    return this.offers.pipe(
+    let fetchedToken: string;
+    return this.authService.token
+    .pipe(
+      take(1),
+      switchMap(token => {
+        fetchedToken = token;
+        return this.offers;
+      }),
       take(1), 
       switchMap(offers => {
         if(!offers || offers.length <= 0)
@@ -411,7 +530,7 @@ export class PlacesService {
           oldOffer.userId,
           oldOffer.location
         );
-        return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/offers/${placeId}.json`, 
+        return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/offers/${placeId}.json?auth=${fetchedToken}`, 
           {...updatedOffers[updatedOfferIndex], id:null}
         );
       }),
@@ -480,7 +599,14 @@ export class PlacesService {
   updatePlace(placeId: string, title: string, description: string) 
   {
     let updatedPlaces: Place[];
-    return this.places.pipe(
+    let fetchedToken: string;
+    return this.authService.token
+    .pipe(
+      take(1),
+      switchMap(token => {
+        fetchedToken = token;
+        return this.offers;
+      }),
       take(1), 
       switchMap(places => {
         if(!places || places.length <= 0)
@@ -507,7 +633,7 @@ export class PlacesService {
           oldPlace.userId,
           oldPlace.location
         );
-        return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/places/${placeId}.json`, 
+        return this.http.put(`https://ionic-angular-booking-ce888.firebaseio.com/places/${placeId}.json?auth=${fetchedToken}`, 
           {...updatedPlaces[updatedPlaceIndex], id:null}
         );
       }),

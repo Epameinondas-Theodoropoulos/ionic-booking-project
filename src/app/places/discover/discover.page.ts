@@ -5,6 +5,7 @@ import { MenuController } from "@ionic/angular";
 import { SegmentChangeEventDetail } from "@ionic/core";
 import { Subscription } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: "app-discover",
@@ -60,17 +61,28 @@ private filter = 'all';
 
   onFilterUpdate(filter: string) 
   {
-    console.log(filter);
-    if(filter === 'all')
-    {
-      this.relevantPlaces = this.loadedPlaces;
-      console.log("relevantPlaces: ", this.relevantPlaces);
-    }
-    else{
-      this.relevantPlaces = this.loadedPlaces.filter(place => 
-        place.userId !== this.authService.userId
-      );
-    }
+    this.authService.userId
+    .pipe(
+      take(1)
+    )
+    .subscribe(
+      userId => {
+        /// to eixame apo exw alla epeidh allaxame to pvw kaloume to userId kai to kaname subsject to metaferame edw
+        console.log(filter);
+        if(filter === 'all')
+        {
+          this.relevantPlaces = this.loadedPlaces;
+          console.log("relevantPlaces: ", this.relevantPlaces);
+        }
+        else{
+          this.relevantPlaces = this.loadedPlaces.filter(place => 
+            place.userId !== userId
+          );
+        }
+        ////
+    
+      }
+    );
 
     this.filter = filter;
   }

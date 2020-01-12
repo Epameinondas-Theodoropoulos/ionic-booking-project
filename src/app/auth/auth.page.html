@@ -60,11 +60,11 @@
         </ion-button>
         <ion-button
           type="submit"
-          (click)="onLogin()"
+          
           expand="block"
           [disabled]="!f.valid"
           >
-          Login
+          {{ isLogin ? 'Login' : 'Signup' }}
         </ion-button>
       </ion-col>
     </ion-row>

@@ -34,6 +34,9 @@ export class AppComponent implements OnInit, OnDestroy {
   // gia ayto bazoume to property previousAuthState
   ngOnInit()
   {
+
+    console.log('userIsAuthneticated ngonint 1')
+ 
     this.authSub = this.authService.userIsAuthneticated.subscribe(isAuth => {
       if(!isAuth && this.previousAuthState !== isAuth)
       {
@@ -41,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
       }
       this.previousAuthState = isAuth;
+      console.log('userIsAuthneticated ngonint')
     });
   }
 

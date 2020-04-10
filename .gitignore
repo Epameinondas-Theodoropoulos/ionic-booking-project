@@ -30,4 +30,4 @@ npm-debug.log*
 /plugins
 /www
 
-functions\ionic-angular-booking-app-key.json
+functions/ionic-angular-booking-app-key.json

@@ -12,5 +12,5 @@ import { ImagePickerComponent } from './pickers/image-picker/image-picker.compon
     entryComponents: [MapModalComponent]
 })
 export class SharedModule {
-
+test: boolean;
 }

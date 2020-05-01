@@ -30,4 +30,5 @@ npm-debug.log*
 /plugins
 /www
 
+#Sensitive Data
 /functions/ionic-angular-booking-app-key.json

@@ -13,4 +13,7 @@ import { ImagePickerComponent } from './pickers/image-picker/image-picker.compon
 })
 export class SharedModule {
 
+
+
+    
 }

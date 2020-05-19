@@ -26,11 +26,10 @@ private filter = 'all';
   isLoading = false;
 
   ngOnInit() {
-    // this.loadedPlaces = this.placesService.places;
     this.listedPlacesSub = this.placesService.places.subscribe(places => {
       this.loadedPlaces = places;
-      this.onFilterUpdate(this.filter);
-    //  this.relevantPlaces = places;
+    //  this.onFilterUpdate(this.filter);
+      this.relevantPlaces = this.loadedPlaces;
     //  this.listedLoadedPlaces = this.relevantPlaces.slice(1);
     });
   }
@@ -78,6 +77,7 @@ private filter = 'all';
           this.relevantPlaces = this.loadedPlaces.filter(place => 
             place.userId !== userId
           );
+          console.log("bookablePlaces: ", this.relevantPlaces);
         }
         ////
     
@@ -89,6 +89,7 @@ private filter = 'all';
 
   ngOnDestroy() {
     if (this.listedPlacesSub) {
+    //  debugger;
       this.listedPlacesSub.unsubscribe;
     }
   }

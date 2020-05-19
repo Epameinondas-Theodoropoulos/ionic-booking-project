@@ -145,8 +145,7 @@ export class BookingsService {
     .pipe(
       take(1),
       switchMap(token => {
-        return this.http
-        .delete(
+        return this.http.delete(
           `https://ionic-angular-booking-ce888.firebaseio.com/bookings/${bookingId}.json?auth=${token}`
         )
       }),

@@ -124,7 +124,7 @@ export class AuthService implements OnDestroy {
   login(email: string, password: string) {
     // twra epeidh tha kanoyme kanoniko login tha to valoyme se allo shmeio
     // this._userIsAuthneticated = true;
-    debugger;
+    //debugger;
     return this.http
       .post<AuthResponseData>(
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseAPIKey}`,

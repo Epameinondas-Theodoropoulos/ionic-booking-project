@@ -120,7 +120,7 @@ export class NewOfferPage implements OnInit {
       this.placesService.uploadImage(this.form.get('image').value) //xeroume oti einai typou file giati to kaname convert apo panw
       .pipe(
         switchMap(uploadRes => {
-          return this.placesService.addOffer(
+          return this.placesService.addPlace(
             this.form.value.title, 
             this.form.value.description, 
             +this.form.value.price, 

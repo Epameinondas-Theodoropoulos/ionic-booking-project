@@ -17,7 +17,7 @@ export class AuthGuard implements CanLoad {
     segments: UrlSegment[],
     ): Observable<boolean> | Promise<boolean> | boolean
   {
-    debugger;
+    //debugger;
     console.log('Auth Guard')
     // if(!this.authService.userIsAuthneticated)
     // {
@@ -39,7 +39,7 @@ export class AuthGuard implements CanLoad {
         
       }),
       tap(isAuthneticated => {
-        debugger;
+        //debugger;
         if(!isAuthneticated)
         {
           this.router.navigateByUrl('/auth');

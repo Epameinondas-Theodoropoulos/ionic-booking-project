@@ -39,7 +39,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
       this.isLoading= true;
       // this.offer = this.placesService.getOffer(paramMap.get('placeId'));
       this.offerSub = this.placesService
-        .getOffer(paramMap.get("placeId"))
+        .getPlace(paramMap.get("placeId"))
         .subscribe(offer => {
           this.offer = offer;
           //to theloume gia na parei ta dedomena apo to offer
@@ -77,7 +77,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
       message: 'Updating Offer...'
     }).then(loadingEl => {
       loadingEl.present();
-      this.placesService.updateOffer(
+      this.placesService.updatePlace(
         this.offer.id,
         this.form.value.title,
         this.form.value.description

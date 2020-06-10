@@ -4,7 +4,7 @@ import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { map, switchMap } from 'rxjs/operators';
-import { OfferLocation, Coordinates } from 'src/app/places/location.model';
+import { PlaceLocation, Coordinates } from 'src/app/places/location.model';
 import { of } from 'rxjs';
 import { Plugins, Capacitor } from '@capacitor/core';
 
@@ -18,7 +18,7 @@ export class LocationPickerComponent implements OnInit {
 
   selectedLocationImage: string;
   isLoading = false;
-  @Output() locationPick = new EventEmitter<OfferLocation>();
+  @Output() locationPick = new EventEmitter<PlaceLocation>();
   @Input() showPreview = false;
 
   constructor(
@@ -88,7 +88,7 @@ export class LocationPickerComponent implements OnInit {
 
   private createPlace(lat: number, lng:number)
   {
-    const pickedLocation: OfferLocation = {
+    const pickedLocation: PlaceLocation = {
       lat: lat,
       lng: lng,
       address: null,

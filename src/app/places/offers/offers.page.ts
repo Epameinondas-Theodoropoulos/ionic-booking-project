@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PlacesService } from '../places.service';
-import { Offer } from './offer.model';
 import { IonItemSliding } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subscription, from } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { take, concatMap, switchMap, map, mergeMap } from 'rxjs/operators';
+import { Place } from '../place.model';
 
 @Component({
   selector: 'app-offers',
@@ -16,7 +16,7 @@ export class OffersPage implements OnInit, OnDestroy {
 
   constructor(private placesService: PlacesService, private router: Router, private authService: AuthService) { }
 
-  loadedOffers: Offer[];
+  loadedOffers: Place[];
   private offersSub: Subscription;
   isLoading = false;
   fetchedUserId: string;
@@ -42,10 +42,11 @@ export class OffersPage implements OnInit, OnDestroy {
       }),
       take(1),
       switchMap( userId => {
+       // debugger;
         return  this.placesService.places;
       })
     ).subscribe(offers => {
-    //  debugger;
+     // debugger;
       this.loadedOffers = offers.filter(offer => offer.userId === this.fetchedUserId)
     })
 

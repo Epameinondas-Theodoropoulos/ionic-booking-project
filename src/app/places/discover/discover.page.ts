@@ -29,6 +29,7 @@ private filter = 'all';
     this.listedPlacesSub = this.placesService.places.subscribe(places => {
       this.loadedPlaces = places;
     //  this.onFilterUpdate(this.filter);
+    //debugger;
       this.relevantPlaces = this.loadedPlaces;
     //  this.listedLoadedPlaces = this.relevantPlaces.slice(1);
     });
@@ -37,6 +38,7 @@ private filter = 'all';
   ionViewWillEnter()
   {
     this.isLoading = true;
+   // debugger;
     this.placesService.fetchPlaces().subscribe(() => {
       this.isLoading = false;
     });

@@ -3,8 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PlacesService } from '../../places.service';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { OfferLocation } from '../../location.model';
 import { switchMap } from 'rxjs/operators';
+import { PlaceLocation } from '../../location.model';
 
 
 function base64toBlob(base64Data, contentType) {
@@ -70,7 +70,7 @@ export class NewOfferPage implements OnInit {
 
   }
 
-  onLocationPicked(location: OfferLocation)
+  onLocationPicked(location: PlaceLocation)
   {
     this.form.patchValue({location: location});
   }

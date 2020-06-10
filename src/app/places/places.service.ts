@@ -1,23 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Place } from "./place.model";
-import { Offer } from "./offers/offer.model";
 import { AuthService } from "../auth/auth.service";
 import { BehaviorSubject, of } from "rxjs";
 import { take, map, tap, delay, switchMap } from "rxjs/operators";
 import { HttpClient } from '@angular/common/http';
-import { OfferLocation, PlaceLocation } from './location.model';
+import { PlaceLocation } from './location.model';
 
-
-interface OfferData {
-  availiableFrom: string;
-  availiableTo: string;
-  description: string;
-  imageUrl: string;
-  price: number;
-  title: string;
-  userId: string;
-  location: OfferLocation;
-}
 
 interface PlaceData {
   availiableFrom: string;
@@ -262,7 +250,7 @@ export class PlacesService {
     price: number,
     dateFrom: Date,
     dateTo: Date,
-    location: OfferLocation,
+    location: PlaceLocation,
     imageUrl: string
   ) {
     let generateId: string;

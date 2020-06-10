@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavController, LoadingController, AlertController } from "@ionic/angular";
-import { Offer } from "../offer.model";
 import { PlacesService } from "../../places.service";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
+import { Place } from '../../place.model';
 
 @Component({
   selector: "app-edit-offer",
@@ -23,7 +23,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
     private alertCtrl: AlertController
   ) {}
 
-  offer: Offer;
+  offer: Place;
   offerSub: Subscription;
   isLoading = false;
   offerId: string;
